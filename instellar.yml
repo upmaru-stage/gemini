@@ -1,0 +1,46 @@
+dependencies:
+  trace: true
+  build:
+    - go
+  runtime:
+    - bash
+    - curl
+    - s6
+    - jq
+    - ca-certificates
+    - gemini-openrc
+
+stack: alpine/3.17
+
+build:
+  destinations: 
+    - bin
+  command: |
+    go build -o bin/gemini
+
+run: 
+  name: gemini
+  - name: migrate
+    binary: gemini
+    call: 'migrate'
+  services:
+  - name: web
+    binary: gemini
+    start:
+      call: 'web'
+
+hook:
+  post-install: |
+    rc-update add gemini
+    rc-service gemini migrate
+
+  pre-upgrade: |
+    rc-service gemini stop
+
+  post-upgrade: |
+    rc-service gemini migrate
+    rc-service gemini start
+
+  post-deinstall: |
+    rc-service gemini stop
+    rc-update del gemini

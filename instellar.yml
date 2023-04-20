@@ -20,14 +20,15 @@ build:
 
 run: 
   name: gemini
-  - name: migrate
-    binary: gemini
-    call: 'migrate'
+  commands:
+    - name: migrate
+      binary: gemini
+      call: 'migrate'
   services:
-  - name: web
-    binary: gemini
-    start:
-      call: 'web'
+    - name: web
+      binary: gemini
+      start:
+        call: 'web'
 
 hook:
   post-install: |

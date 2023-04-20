@@ -6,15 +6,16 @@ import (
 	"github.com/upmaru-stage/gemini/models"
 )
 
+type CreateParams struct {
+	Title string `json:"title"`
+	Body  string `json:"body"`
+}
+
 func CreatePost(c *gin.Context) {
-	var params struct {
-		title string
-		body  string
-	}
+	var createParams CreateParams
+	c.BindJSON(&createParams)
 
-	c.Bind(&params)
-
-	post := models.Post{Title: params.title, Body: params.body}
+	post := models.Post{Title: createParams.Title, Body: createParams.Body}
 
 	result := initializers.DB.Create(&post)
 

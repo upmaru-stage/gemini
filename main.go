@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -26,7 +26,7 @@ func web() {
 }
 
 func migrate() {
-	log.Println("INFO: Running migrations")
+	fmt.Println("INFO: Running migrations")
 
 	initializers.DB.AutoMigrate(&models.Post{})
 }
